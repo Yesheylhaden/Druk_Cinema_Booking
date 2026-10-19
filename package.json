@@ -1,0 +1,13 @@
+{
+  "name": "druk-cinema",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/start-development.mjs",
+    "start:frontend": "npm start --prefix frontend",
+    "start:backend": "npm start --prefix backend",
+    "build": "node scripts/build-frontend.mjs",
+    "test": "npm test --prefix backend"
+  }
+}

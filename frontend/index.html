@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>
+      Druk Cinema · Admin Dashboard
+    </title>
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+  </head>
+  <body>
+    <aside id="sidebar">
+      <a class="brand" href="#overview">
+        <img src="assets/images/druk-cinema-logo.png" alt="Druk Cinema logo">
+        <span>
+          Druk Cinema
+          <small>
+            ADMIN CONSOLE
+          </small>
+        </span>
+      </a>
+      <div class="nav-label">
+        WORKSPACE
+      </div>
+      <nav>
+        <button data-page="overview" class="active">
+          ▦
+          <span>
+            Overview
+          </span>
+        </button>
+        <button data-page="movies">
+          ▣
+          <span>
+            Movies
+          </span>
+        </button>
+        <button data-page="showtimes">
+          ◷
+          <span>
+            Showtimes
+          </span>
+        </button>
+        <button data-page="bookings">
+          ▤
+          <span>
+            Bookings
+          </span>
+          <b>
+            24
+          </b>
+        </button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="cinema-status">
+          <span class="live-dot">
+          </span>
+          Cinema is open
+          <small>
+            Ready for the next great story.
+          </small>
+        </div>
+        <div class="profile">
+          <div class="avatar">
+            AD
+          </div>
+          <div>
+            Administrator
+            <small>
+              Druk Cinema
+            </small>
+          </div>
+          <span>
+            ⌄
+          </span>
+        </div>
+      </div>
+    </aside>
+    <div class="workspace">
+      <header>
+        <div>
+          <button id="menu" aria-label="Toggle navigation">
+            ☰
+          </button>
+          <span class="breadcrumb">
+            Workspace
+            <span>
+              /
+            </span>
+            <strong id="crumb">
+              Overview
+            </strong>
+          </span>
+        </div>
+        <div class="header-right">
+          <span class="demo">
+            DEMO WORKSPACE
+          </span>
+          <button id="notifications" aria-label="View notifications">
+            ♧
+            <i>
+            </i>
+          </button>
+          <div class="avatar small">
+            AD
+          </div>
+        </div>
+      </header>
+      <main>
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow">
+              YOUR CINEMA, AT A GLANCE
+            </div>
+            <h1 id="page-title">
+              Dashboard overview
+              <span>
+                .
+              </span>
+            </h1>
+            <p id="subtitle">
+              Welcome back, Admin. Here’s what’s happening at Druk Cinema.
+            </p>
+          </div>
+          <button class="primary" id="add-movie">
+            ＋ Add movie
+          </button>
+        </div>
+        <section id="overview">
+          <div class="toolbar">
+            <div class="tabs">
+              <button class="selected" data-range="today">
+                Today
+              </button>
+              <button data-range="week">
+                This week
+              </button>
+              <button data-range="month">
+                This month
+              </button>
+            </div>
+            <span class="date">
+              ◷
+              &nbsp;
+              19 October 2026
+            </span>
+          </div>
+          <div class="stats" id="stats">
+          </div>
+          <div class="chart-grid">
+            <article class="panel revenue">
+              <div class="panel-heading">
+                <div>
+                  <h2>
+                    Revenue overview
+                  </h2>
+                  <p>
+                    Ticket sales across the week
+                  </p>
+                </div>
+                <button class="text-button" id="export">
+                  ↓ Export report
+                </button>
+              </div>
+              <div class="chart-total">
+                Nu. 148,500
+                <span>
+                  ↗ 18.6%
+                </span>
+              </div>
+              <div class="chart">
+                <div class="y-axis">
+                  <span>
+                    60k
+                  </span>
+                  <span>
+                    45k
+                  </span>
+                  <span>
+                    30k
+                  </span>
+                  <span>
+                    15k
+                  </span>
+                  <span>
+                    0
+                  </span>
+                </div>
+                <div class="plot">
+                  <div class="grid-lines">
+                  </div>
+                  <svg viewBox="0 0 700 180" preserveAspectRatio="none" role="img" aria-label="Weekly revenue rises from Monday to Sunday">
+                    <defs>
+                      <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#ff7900" stop-opacity=".3"/>
+                        </stop>
+                        <stop offset="1" stop-color="#ff7900" stop-opacity="0"/>
+                        </stop>
+                      </lineargradient>
+                    </defs>
+                    <path d="M0 144 C45 144 60 96 115 105 S180 155 230 115 S295 95 345 87 S405 12 460 38 S525 87 575 54 S650 38 700 8 L700 180 L0 180Z" fill="url(#fill)"/>
+                    </path>
+                    <path d="M0 144 C45 144 60 96 115 105 S180 155 230 115 S295 95 345 87 S405 12 460 38 S525 87 575 54 S650 38 700 8" fill="none" stroke="#ff810a" stroke-width="3"/>
+                    </path>
+                  </svg>
+                  <div class="x-axis">
+                    <span>
+                      Mon
+                    </span>
+                    <span>
+                      Tue
+                    </span>
+                    <span>
+                      Wed
+                    </span>
+                    <span>
+                      Thu
+                    </span>
+                    <span>
+                      Fri
+                    </span>
+                    <span>
+                      Sat
+                    </span>
+                    <span>
+                      Sun
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="panel occupancy">
+              <div class="panel-heading">
+                <div>
+                  <h2>
+                    Seat occupancy
+                  </h2>
+                  <p>
+                    A little closer to a full house
+                  </p>
+                </div>
+                <span class="muted">
+                  ↗
+                </span>
+              </div>
+              <div class="donut">
+                <div>
+                  <strong id="occupancy">
+                    78
+                    <span>
+                      %
+                    </span>
+                  </strong>
+                  <small>
+                    Seats filled
+                  </small>
+                </div>
+              </div>
+              <div class="legend">
+                <span>
+                  <i>
+                  </i>
+                  Booked
+                  <b>
+                    936
+                  </b>
+                </span>
+                <span>
+                  <i>
+                  </i>
+                  Available
+                  <b>
+                    264
+                  </b>
+                </span>
+              </div>
+            </article>
+          </div>
+          <div class="bottom-grid">
+            <article class="panel bookings-panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>
+                    Recent bookings
+                  </h2>
+                  <p>
+                    The latest seats reserved for a great experience
+                  </p>
+                </div>
+                <button class="text-button" data-goto="bookings">
+                  View all ↗
+                </button>
+              </div>
+              <div class="table-wrap" id="recent-table">
+              </div>
+            </article>
+            <article class="panel now-showing">
+              <div class="panel-heading">
+                <div>
+                  <h2>
+                    Now showing
+                  </h2>
+                  <p>
+                    Stories on the big screen
+                  </p>
+                </div>
+                <button class="text-button" data-goto="movies">
+                  View all ↗
+                </button>
+              </div>
+              <div id="movie-preview">
+              </div>
+            </article>
+          </div>
+        </section>
+        <section id="management" hidden>
+        </section>
+        <footer>
+          <span>
+            © 2026 Druk Cinema
+          </span>
+          <span>
+            Made for the love of cinema
+            <span class="gold">
+              ✦
+            </span>
+          </span>
+        </footer>
+      </main>
+    </div>
+    <dialog id="movie-dialog">
+      <form id="movie-form">
+        <div class="panel-heading">
+          <h2>
+            Add a movie
+          </h2>
+          <button type="button" id="close-dialog" aria-label="Close">
+            ✕
+          </button>
+        </div>
+        <label>
+          Movie title
+          <input name="title" required maxlength="80" placeholder="Enter movie title">
+        </label>
+        <div class="form-row">
+          <label>
+            Genre
+            <select name="genre">
+              <option>
+                Drama
+              </option>
+              <option>
+                Romance
+              </option>
+              <option>
+                Comedy
+              </option>
+              <option>
+                Adventure
+              </option>
+              <option>
+                Action
+              </option>
+            </select>
+          </label>
+          <label>
+            Runtime (minutes)
+            <input name="runtime" required type="number" min="1" max="600" value="120">
+          </label>
+        </div>
+        <label>
+          Status
+          <select name="status">
+            <option>
+              Now showing
+            </option>
+            <option>
+              Coming soon
+            </option>
+          </select>
+        </label>
+        <button class="primary" type="submit">
+          Save movie
+        </button>
+        <p class="muted">
+          Saved by the backend in your local demo database.
+        </p>
+      </form>
+    </dialog>
+    <div id="toast" role="status">
+    </div>
+    <script type="module" src="assets/js/dashboard.js">
+    </script>
+  </body>
+</html>
