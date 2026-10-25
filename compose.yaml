@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: druk_cinema
+      POSTGRES_USER: druk
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - cinema-data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/001-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U druk -d druk_cinema"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  catalog:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    environment:
+      DATABASE_URL: postgresql://druk:${POSTGRES_PASSWORD}@postgres:5432/druk_cinema
+    ports: ["127.0.0.1:4001:4001"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  bookings:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    command: ["node","services/bookings/src/server.js"]
+    environment:
+      DATABASE_URL: postgresql://druk:${POSTGRES_PASSWORD}@postgres:5432/druk_cinema
+      CATALOG_URL: http://catalog:4001
+    ports: ["127.0.0.1:4002:4002"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  cinema-data:

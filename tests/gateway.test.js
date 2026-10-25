@@ -1,0 +1,8 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import worker from '../services/gateway/src/worker.js';
+const env={FRONTEND_ORIGIN:'https://cinema.example',CATALOG_URL:'https://catalog.example',BOOKINGS_URL:'https://bookings.example'};
+test('rejects unexpected browser origins',async()=>{const r=await worker.fetch(new Request('https://gateway.example/api/movies',{headers:{Origin:'https://other.example'}}),env);assert.equal(r.status,403);});
+test('handles preflight for the frontend',async()=>{const r=await worker.fetch(new Request('https://gateway.example/api/bookings',{method:'OPTIONS',headers:{Origin:env.FRONTEND_ORIGIN}}),env);assert.equal(r.status,204);assert.equal(r.headers.get('Access-Control-Allow-Origin'),env.FRONTEND_ORIGIN);});
+test('limits exposed routes and methods',async()=>{assert.equal((await worker.fetch(new Request('https://gateway.example/admin'),env)).status,404);assert.equal((await worker.fetch(new Request('https://gateway.example/api/movies',{method:'DELETE'}),env)).status,405);});
+test('routes movie and booking requests to their services',async()=>{const original=globalThis.fetch;const seen=[];globalThis.fetch=async(url,options)=>{seen.push({url:String(url),method:options.method});return Response.json({ok:true});};try{for(const path of ['/api/movies','/api/showtimes?movieId=1','/api/bookings/seats?showtimeId=2']){const r=await worker.fetch(new Request('https://gateway.example'+path),env);assert.equal(r.status,200);assert.equal(r.headers.get('Cache-Control'),'no-store');}assert.equal(seen[0].url,'https://catalog.example/api/movies');assert.equal(seen[2].url,'https://bookings.example/api/bookings/seats?showtimeId=2');}finally{globalThis.fetch=original;}});

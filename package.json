@@ -1,0 +1,17 @@
+{
+  "name": "druk-cinema",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "services/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w frontend",
+    "build": "npm run build -w frontend",
+    "test": "node --test tests/*.test.js"
+  },
+  "type": "module",
+  "overrides": {
+    "undici": "^7.30.1"
+  }
+}

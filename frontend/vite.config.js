@@ -1,0 +1,1 @@
+import {defineConfig} from 'vite'; export default defineConfig({server:{proxy:{'/api/movies':'http://localhost:4001','/api/showtimes':'http://localhost:4001','/api/bookings':'http://localhost:4002'}}});
