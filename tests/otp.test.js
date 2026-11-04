@@ -1,0 +1,5 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {otpHash,otpMatches,selectionHash} from '../services/bookings/src/otp.js';
+test('OTP hashes verify exact six-digit codes',()=>{const row={salt:'random-salt',code_hash:otpHash('012345','random-salt')};assert.equal(otpMatches('012345',row),true);assert.equal(otpMatches('999999',row),false);assert.equal(otpMatches('12345',row),false);assert.equal(otpMatches(null,row),false);assert.notEqual(row.code_hash,'012345');});
+test('OTP approval is tied to seats, showtime, movie, and server price',()=>{const body={movieId:1,showtimeId:2,seats:['A1','A2']},hash=selectionHash(body,700);assert.equal(selectionHash({...body,seats:['A2','A1']},700),hash);for(const changed of [{...body,movieId:2},{...body,showtimeId:3},{...body,seats:['B1','B2']}])assert.notEqual(selectionHash(changed,700),hash);assert.notEqual(selectionHash(body,1),hash);});

@@ -5,3 +5,5 @@ compatibility_date = "2026-10-01"
 FRONTEND_ORIGIN = "http://localhost:5173"
 CATALOG_URL = "http://localhost:4001"
 BOOKINGS_URL = "http://localhost:4002"
+
+AUTH_URL = "http://localhost:4003"

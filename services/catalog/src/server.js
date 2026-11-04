@@ -1,8 +1,12 @@
+import {readFile} from 'node:fs/promises';
 import express from 'express';
 import pg from 'pg';
 const app=express(),pool=new pg.Pool({connectionString:process.env.DATABASE_URL});
+await pool.query(await readFile(new URL('./movies.sql',import.meta.url),'utf8'));
+await pool.query(await readFile(new URL('./theatres.sql',import.meta.url),'utf8'));
 app.get('/health',async(req,res)=>{try{await pool.query('SELECT 1');res.json({status:'ok'});}catch{res.status(503).json({error:'Database unavailable'});}});
-app.get('/api/movies',async(req,res,next)=>{try{res.json((await pool.query('SELECT * FROM catalog.movies ORDER BY rating DESC')).rows);}catch(e){next(e);}});
-app.get('/api/showtimes',async(req,res,next)=>{try{res.json((await pool.query('SELECT * FROM catalog.showtimes WHERE movie_id=$1 AND starts_at>NOW() ORDER BY starts_at',[req.query.movieId])).rows);}catch(e){next(e);}});
+app.get('/api/movies',async(req,res,next)=>{try{res.json((await pool.query('SELECT * FROM catalog.movies ORDER BY (listing_status=\'now_showing\') DESC,is_new DESC,rating DESC NULLS LAST,id DESC')).rows);}catch(e){next(e);}});
+app.get('/api/showtimes',async(req,res,next)=>{try{res.json((await pool.query('SELECT s.*,t.name AS theatre_name,t.city FROM catalog.showtimes s JOIN catalog.theatres t ON t.id=s.theatre_id JOIN catalog.movies m ON m.id=s.movie_id WHERE s.movie_id=$1 AND s.starts_at>NOW() AND m.listing_status=\'now_showing\' ORDER BY s.starts_at,t.id',[req.query.movieId])).rows);}catch(e){next(e);}});
+app.get('/api/showtimes/:id',async(req,res,next)=>{try{const {rows}=await pool.query('SELECT s.*, m.title AS movie_title FROM catalog.showtimes s JOIN catalog.movies m ON m.id=s.movie_id WHERE s.id=$1',[req.params.id]);if(!rows[0])return res.status(404).json({error:'Showtime not found'});res.json(rows[0]);}catch(error){next(error);}});
 app.use((err,req,res,next)=>{console.error(err.message);res.status(503).json({error:'Movie service unavailable'});});
 app.listen(process.env.PORT||4001,'0.0.0.0');

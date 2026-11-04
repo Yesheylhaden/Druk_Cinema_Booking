@@ -31,7 +31,34 @@ services:
     environment:
       DATABASE_URL: postgresql://druk:${POSTGRES_PASSWORD}@postgres:5432/druk_cinema
       CATALOG_URL: http://catalog:4001
+      AUTH_URL: http://auth:4003
+      DEMO_PAYMENTS: ${DEMO_PAYMENTS:-false}
+      NODE_ENV: ${NODE_ENV:-development}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
     ports: ["127.0.0.1:4002:4002"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  auth:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    command: ["node","services/auth/src/server.js"]
+    environment:
+      DATABASE_URL: postgresql://druk:${POSTGRES_PASSWORD}@postgres:5432/druk_cinema
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+    ports: ["127.0.0.1:4003:4003"]
     depends_on:
       postgres:
         condition: service_healthy
