@@ -1,0 +1,189 @@
+x-runtime-env: &runtime-env
+  PUBLIC_APP_URL: ${PUBLIC_APP_URL:-http://localhost:5173}
+  FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
+  SERVICE_TOKEN: ${SERVICE_TOKEN:?Set SERVICE_TOKEN in .env}
+  MOVIES_URL: http://movies:4001
+  BOOKINGS_URL: http://bookings:4002
+  AUTH_URL: http://auth:4003
+  PROFILES_URL: http://profiles:4004
+  CINEMAS_URL: http://cinemas:4005
+  SHOWTIMES_URL: http://showtimes:4006
+  HALLS_URL: http://halls:4007
+  SEATS_URL: http://seats:4008
+  RESERVATIONS_URL: http://reservations:4009
+  PAYMENTS_URL: http://payments:4010
+  TICKETS_URL: http://tickets:4011
+  NOTIFICATIONS_URL: http://notifications:4012
+  SEARCH_URL: http://search:4013
+x-runtime: &runtime
+  build:
+    context: .
+    dockerfile: Dockerfile.service
+    args:
+      NODE_IMAGE: ${NODE_IMAGE:-node:22-alpine}
+  depends_on:
+    postgres:
+      condition: service_healthy
+    migrate:
+      condition: service_completed_successfully
+  healthcheck:
+    test: ["CMD", "node", "-e", "fetch('http://localhost:'+process.env.PORT+'/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+    interval: 5s
+    timeout: 4s
+    retries: 20
+    start_period: 10s
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: druk_cinema
+      POSTGRES_USER: druk
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - cinema-data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/001-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U druk -d druk_cinema"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:22-alpine}
+    command: ["node","services/migrations/src/server.js"]
+    environment:
+      DATABASE_URL: postgresql://druk:${POSTGRES_PASSWORD}@postgres:5432/druk_cinema
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      MOVIES_DB_PASSWORD: ${MOVIES_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      BOOKINGS_DB_PASSWORD: ${BOOKINGS_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      PROFILES_DB_PASSWORD: ${PROFILES_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      CINEMAS_DB_PASSWORD: ${CINEMAS_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      SHOWTIMES_DB_PASSWORD: ${SHOWTIMES_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      HALLS_DB_PASSWORD: ${HALLS_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      SEATS_DB_PASSWORD: ${SEATS_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      RESERVATIONS_DB_PASSWORD: ${RESERVATIONS_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      PAYMENTS_DB_PASSWORD: ${PAYMENTS_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      TICKETS_DB_PASSWORD: ${TICKETS_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      NOTIFICATIONS_DB_PASSWORD: ${NOTIFICATIONS_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+      SEARCH_DB_PASSWORD: ${SEARCH_DB_PASSWORD:-${POSTGRES_PASSWORD}}
+    depends_on:
+      postgres:
+        condition: service_healthy
+  movies:
+    <<: *runtime
+    command: ["node","services/movies/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4001
+      DATABASE_URL: postgresql://movies_runtime:${MOVIES_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+    ports: ["127.0.0.1:4001:4001"]
+  bookings:
+    <<: *runtime
+    command: ["node","services/bookings/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4002
+      DATABASE_URL: postgresql://bookings_runtime:${BOOKINGS_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+    ports: ["127.0.0.1:4002:4002"]
+  auth:
+    <<: *runtime
+    command: ["node","services/auth/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4003
+      DATABASE_URL: postgresql://auth_runtime:${AUTH_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+    ports: ["127.0.0.1:4003:4003"]
+  profiles:
+    <<: *runtime
+    command: ["node","services/profiles/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4004
+      DATABASE_URL: postgresql://profiles_runtime:${PROFILES_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+    ports: ["127.0.0.1:4004:4004"]
+  cinemas:
+    <<: *runtime
+    command: ["node","services/cinemas/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4005
+      DATABASE_URL: postgresql://cinemas_runtime:${CINEMAS_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+    ports: ["127.0.0.1:4005:4005"]
+  showtimes:
+    <<: *runtime
+    command: ["node","services/showtimes/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4006
+      DATABASE_URL: postgresql://showtimes_runtime:${SHOWTIMES_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+    ports: ["127.0.0.1:4006:4006"]
+  halls:
+    <<: *runtime
+    command: ["node","services/halls/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4007
+      DATABASE_URL: postgresql://halls_runtime:${HALLS_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+    ports: ["127.0.0.1:4007:4007"]
+  seats:
+    <<: *runtime
+    command: ["node","services/seats/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4008
+      DATABASE_URL: postgresql://seats_runtime:${SEATS_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+    ports: ["127.0.0.1:4008:4008"]
+  reservations:
+    <<: *runtime
+    command: ["node","services/reservations/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4009
+      DATABASE_URL: postgresql://reservations_runtime:${RESERVATIONS_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+    ports: ["127.0.0.1:4009:4009"]
+  payments:
+    <<: *runtime
+    command: ["node","services/payments/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4010
+      DATABASE_URL: postgresql://payments_runtime:${PAYMENTS_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+      DEMO_PAYMENTS: ${DEMO_PAYMENTS:-false}
+      NODE_ENV: ${NODE_ENV:-development}
+    ports: ["127.0.0.1:4010:4010"]
+  tickets:
+    <<: *runtime
+    command: ["node","services/tickets/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4011
+      DATABASE_URL: postgresql://tickets_runtime:${TICKETS_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+    ports: ["127.0.0.1:4011:4011"]
+  notifications:
+    <<: *runtime
+    command: ["node","services/notifications/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4012
+      DATABASE_URL: postgresql://notifications_runtime:${NOTIFICATIONS_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+    ports: ["127.0.0.1:4012:4012"]
+  search:
+    <<: *runtime
+    command: ["node","services/search/src/server.js"]
+    environment:
+      <<: *runtime-env
+      PORT: 4013
+      DATABASE_URL: postgresql://search_runtime:${SEARCH_DB_PASSWORD:-${POSTGRES_PASSWORD}}@postgres:5432/druk_cinema
+    ports: ["127.0.0.1:4013:4013"]
+volumes:
+  cinema-data:

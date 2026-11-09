@@ -1,0 +1,10 @@
+ARG NODE_IMAGE=node:22-alpine
+FROM ${NODE_IMAGE}
+USER root
+WORKDIR /app
+COPY package.json package-lock.json ./
+COPY frontend/package.json frontend/package.json
+COPY services services
+RUN rm -rf node_modules services/*/node_modules && npm ci --omit=dev --workspaces --include-workspace-root --no-audit --no-fund
+USER node
+CMD ["node","services/auth/src/server.js"]
