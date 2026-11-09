@@ -102,5 +102,13 @@
     "port": 4002,
     "schema": "booking",
     "role": "bookings_runtime"
+  },
+  {
+    "proposal": 21,
+    "name": "discounts",
+    "title": "Discount",
+    "port": 4014,
+    "schema": "discount",
+    "role": "discounts_runtime"
   }
 ]
