@@ -1,1 +1,12 @@
-{"name":"@druk/auth","private":true,"type":"module","scripts":{"start":"node src/server.js"},"dependencies":{"express":"^4.21.2","nodemailer":"^10.3.1","pg":"^8.13.3"}}
+{
+    "name":  "@druk/auth",
+    "private":  true,
+    "type":  "module",
+    "scripts":  {
+                    "start":  "node src/server.js"
+                },
+    "dependencies":  {
+                         "express":  "^4.21.2",
+                         "pg":  "^8.13.3"
+                     }
+}

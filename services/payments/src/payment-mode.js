@@ -1,0 +1,1 @@
+export const demoPaymentsEnabled=env=>env.DEMO_PAYMENTS==='true'&&env.NODE_ENV!=='production';

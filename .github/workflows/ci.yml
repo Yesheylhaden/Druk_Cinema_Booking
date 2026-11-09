@@ -5,6 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       POSTGRES_PASSWORD: ciLocalPassword
+      SERVICE_TOKEN: ci-test-internal-token-not-for-production
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -16,7 +17,8 @@ jobs:
       - run: npm run build
       - run: docker compose config --quiet
       - run: docker compose up --build -d
-      - run: RUN_INTEGRATION=1 node --test tests/integration.test.js tests/profile.integration.test.js tests/catalog.integration.test.js
+      - run: node scripts/wait-services.mjs
+      - run: RUN_INTEGRATION=1 node --test tests/integration.test.js tests/profile.integration.test.js tests/catalog.integration.test.js tests/services.integration.test.js
       - run: DEMO_PAYMENTS=true docker compose up -d bookings
       - run: RUN_INTEGRATION=1 node --test tests/demo.integration.test.js
       - if: always()

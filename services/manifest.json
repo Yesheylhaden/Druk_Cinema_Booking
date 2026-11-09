@@ -1,0 +1,106 @@
+[
+  {
+    "proposal": 1,
+    "name": "auth",
+    "title": "User Authentication",
+    "port": 4003,
+    "schema": "identity",
+    "role": "auth_runtime"
+  },
+  {
+    "proposal": 2,
+    "name": "profiles",
+    "title": "User Profile",
+    "port": 4004,
+    "schema": "profiles",
+    "role": "profiles_runtime"
+  },
+  {
+    "proposal": 3,
+    "name": "cinemas",
+    "title": "Cinema Management",
+    "port": 4005,
+    "schema": "cinemas",
+    "role": "cinemas_runtime"
+  },
+  {
+    "proposal": 4,
+    "name": "movies",
+    "title": "Movie",
+    "port": 4001,
+    "schema": "movies",
+    "role": "movies_runtime"
+  },
+  {
+    "proposal": 5,
+    "name": "showtimes",
+    "title": "Showtime",
+    "port": 4006,
+    "schema": "showtimes",
+    "role": "showtimes_runtime"
+  },
+  {
+    "proposal": 6,
+    "name": "halls",
+    "title": "Screen / Hall",
+    "port": 4007,
+    "schema": "halls",
+    "role": "halls_runtime"
+  },
+  {
+    "proposal": 7,
+    "name": "seats",
+    "title": "Seat Management",
+    "port": 4008,
+    "schema": "seats",
+    "role": "seats_runtime"
+  },
+  {
+    "proposal": 8,
+    "name": "reservations",
+    "title": "Seat Reservation",
+    "port": 4009,
+    "schema": "reservations",
+    "role": "reservations_runtime"
+  },
+  {
+    "proposal": 9,
+    "name": "payments",
+    "title": "Payment (demo)",
+    "port": 4010,
+    "schema": "payments",
+    "role": "payments_runtime"
+  },
+  {
+    "proposal": 11,
+    "name": "tickets",
+    "title": "Ticket",
+    "port": 4011,
+    "schema": "tickets",
+    "role": "tickets_runtime"
+  },
+  {
+    "proposal": 13,
+    "name": "notifications",
+    "title": "Notification (SMTP adapter)",
+    "port": 4012,
+    "schema": "notifications",
+    "role": "notifications_runtime"
+  },
+  {
+    "proposal": 15,
+    "name": "search",
+    "title": "Search",
+    "port": 4013,
+    "schema": "search",
+    "role": "search_runtime"
+  },
+  {
+    "proposal": 20,
+    "name": "bookings",
+    "title": "Booking",
+    "port": 4002,
+    "schema": "booking",
+    "role": "bookings_runtime"
+  }
+]

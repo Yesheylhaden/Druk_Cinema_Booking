@@ -8,7 +8,7 @@ const sql=q=>exec('docker',['compose','exec','-T','postgres','psql','-U','druk',
 test('profile, password changes, one-time verification, recovery, and email changes',{skip:process.env.RUN_INTEGRATION!=='1'},async(t)=>{
  const email='profile-'+randomUUID()+'@example.com',newEmail='changed-'+randomUUID()+'@example.com',password='Initial test password 2026!';
  let cookie='',id;
- const request=(path,body,session=cookie)=>fetch(base+'/api/auth/'+path,{method:body?'POST':'GET',headers:{Cookie:session,Origin:'http://localhost:5173','Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+ const request=(path,body,session=cookie)=>fetch((path==='profile'?'http://localhost:4004/api/profiles/me':base+'/api/auth/'+path),{method:body?'POST':'GET',headers:{Cookie:session,Origin:'http://localhost:5173','Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
  const registered=await request('register',{name:'Profile Test',email,password});assert.equal(registered.status,201);id=(await registered.json()).user.id;assert.match(id,/^[a-f0-9-]{36}$/);cookie=registered.headers.get('set-cookie').split(';')[0];
  async function seed(purpose,target=email,expired=false){
   const token=randomBytes(32).toString('hex'),hash=createHash('sha256').update(token).digest('hex');
@@ -44,5 +44,5 @@ test('profile, password changes, one-time verification, recovery, and email chan
   assert.equal((await request('me')).status,401);
   assert.equal((await request('login',{email,password:'Recovered password 2026!'},'')).status,401);
   response=await request('login',{email:newEmail,password:'Recovered password 2026!'},'');assert.equal(response.status,200);user=(await response.json()).user;assert.equal(user.email,newEmail);assert.equal(user.emailVerified,true);
- }finally{await sql("DELETE FROM identity.users WHERE id='"+id+"';");}
+ }finally{await sql("DELETE FROM profiles.users WHERE user_id='"+id+"'; DELETE FROM identity.users WHERE id='"+id+"';");}
 });

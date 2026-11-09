@@ -1,1 +1,1 @@
-export const demoPaymentsEnabled=env=>env.DEMO_PAYMENTS==='true'&&env.NODE_ENV!=='production';
+export {demoPaymentsEnabled} from '../../payments/src/payment-mode.js';

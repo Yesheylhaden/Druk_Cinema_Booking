@@ -1,3 +1,4 @@
+import cinemaLogo from './assets/druk-cinema-logo.png';
 import React,{useEffect,useRef,useState} from 'react';
 import {accountRequest} from './auth';
 
@@ -19,15 +20,7 @@ export default function AuthScreens({onBack,onSuccess,initialScreen='login',onNa
  }
  return <main className="auth-page"><aside className="auth-brand-panel">
   <a className="auth-brand-lockup" href="#/" onClick={event=>{event.preventDefault();if(!busy)onBack();}} aria-label="Druk Cinema home">
-    <svg className="auth-camera" viewBox="0 0 128 128" fill="none" aria-hidden="true">
-      <rect x="8" y="10" width="112" height="112" rx="10" fill="#ee8700"/>
-      <rect x="2" y="4" width="112" height="112" rx="10" fill="#ff9d00"/>
-      <path d="M13 16Q13 10 21 10H34Q39 12 32 15L23 19Q20 21 18 29Q15 39 12 36Z" fill="#ffc34c"/>
-      <circle cx="55" cy="41" r="20" fill="#f8fafb"/>
-      <circle cx="89" cy="47" r="14" fill="#f8fafb"/>
-      <rect x="43" y="61" width="57" height="43" rx="5" fill="#f8fafb"/>
-      <path d="M43 76L23 62Q17 59 17 66V99Q17 106 23 102L43 88Z" fill="#f8fafb"/>
-    </svg>
+    <img className="auth-logo" src={cinemaLogo} alt=""/>
     <h1>DRUK<br/>CINEMA</h1>
     <p>Your Cinematic Companion</p>
   </a>

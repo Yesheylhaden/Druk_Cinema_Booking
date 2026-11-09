@@ -10,7 +10,7 @@ export default function Profile({onUpdate,onAuthRequired}){
   try{
    const payload=kind==='profile'?{name:data.get('name'),phone:data.get('phone')}:kind==='password'?{currentPassword:data.get('currentPassword'),newPassword:data.get('newPassword')}:{email:data.get('email'),currentPassword:data.get('currentPassword')};
    const result=await accountRequest(kind==='email'?'email/change':kind,payload);
-   if(result.user){setProfile(result.user);onUpdate(result.user);}
+   if(result.user&&kind==='profile'){setProfile(result.user);onUpdate(result.user);}
    if(kind!=='profile')form.reset();setNotice(result.message);
   }catch(err){if(err.status===401)onAuthRequired();else setError(err.message||'Unable to update your account.');}finally{setBusy('');}
  }

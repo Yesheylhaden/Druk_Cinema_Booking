@@ -1,4 +1,5 @@
-import {attachProfileRoutes} from './profile.js';
+import {attachAccountSecurityRoutes} from './account-security.js';
+import {call} from '../../common/http.js';
 import express from 'express';
 import {randomBytes,randomUUID} from 'node:crypto';
 import {normalizeEmail,validEmail,validPassword,digest,sessionToken,hashPassword,verifyPassword} from './security.js';
@@ -8,7 +9,7 @@ export async function createAuthApp(pool,{origins=['http://localhost:5173'],secu
  app.disable('x-powered-by');
  app.use(express.json({limit:'16kb'}));
  app.use((_req,res,next)=>{res.set('Cache-Control','no-store');next();});
- app.get('/health',async(_req,res)=>{try{await pool.query('SELECT 1');res.json({status:'ok'});}catch{res.status(503).json({error:'Database unavailable'});}});
+ app.get('/health',async(_req,res)=>{try{await pool.query('SELECT 1');res.json({status:'ok',service:'auth'});}catch{res.status(503).json({error:'Database unavailable'});}});
  app.use('/api/auth',(req,res,next)=>{
   if(req.method==='POST'&&(!req.is('application/json')||req.headers.origin&&!origins.includes(req.headers.origin)||req.headers['sec-fetch-site']==='cross-site')){
    return res.status(403).json({error:'Request origin or content type is not allowed.'});
@@ -66,7 +67,9 @@ export async function createAuthApp(pool,{origins=['http://localhost:5173'],secu
   const token=sessionToken(req.headers.cookie);if(token)await pool.query('DELETE FROM identity.sessions WHERE token_hash=$1',[digest(token)]);
   cookie(res,'',0);res.json({ok:true});
  }));
- attachProfileRoutes(app,pool,{wrap,cookie,issue,origin:origins[0]});
- app.use((error,_req,res,_next)=>{console.error(error.code||error.name);res.status(error.type==='entity.parse.failed'?400:503).json({error:error.type==='entity.parse.failed'?'Invalid request.':'Account service unavailable. Please try again.'});});
+ app.get('/api/auth/profile',wrap(async(req,res)=>res.json(await call('profiles','/api/profiles/me',{cookie:req.headers.cookie}))));
+ app.post('/api/auth/profile',wrap(async(req,res)=>res.json(await call('profiles','/api/profiles/me',{body:req.body,cookie:req.headers.cookie}))));
+ attachAccountSecurityRoutes(app,pool,{wrap,cookie,issue,origin:origins[0]});
+ app.use((error,_req,res,_next)=>{console.error(error.code||error.name);res.status(error.status||(error.type==='entity.parse.failed'?400:503)).json({error:error.status?error.message:error.type==='entity.parse.failed'?'Invalid request.':'Account service unavailable. Please try again.'});});
  return app;
 }
