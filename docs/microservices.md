@@ -158,3 +158,18 @@ Real SMTP delivery, real bank payments and production deployment are not verifie
 ### Ticket QR codes
 Confirmed paid/demo-paid bookings show a QR code in the booking confirmation, booking history and PDF. The code opens `#/ticket/<booking-id>`; the owner must sign in and backend ownership checks still apply. It is a ticket viewing link, not an admission check-in or single-use scanner.
 Set `PUBLIC_APP_URL` in `.env` to the customer-facing frontend URL, then recreate Tickets with `docker compose up -d tickets`. The default is `http://localhost:5173`; to scan using a phone, use a LAN-accessible hostname/IP (and allow that frontend origin for authentication), or a deployed HTTPS frontend. Localhost refers to the scanning device and is not reachable as your computer from a phone. Existing PDFs keep their original links; download again after changing the URL. QR generation runs locally without sending booking details to a third-party image service. This feature is part of Ticket Service; a separate proposed QR Code Service is still not split out.
+
+
+### Role-based login (RBAC)
+Authentication owns the authoritative `user` and `admin` roles. Existing/new accounts default to `user`; registration/profile requests cannot assign roles. Login, session restoration and account-security responses carry the role. Both roles log in using the same form. Admins land on `#/admin` by default; explicit booking/ticket destinations are preserved. General users cannot access the admin page or `GET /api/auth/admin/users`; the backend checks the current database role on every request. Other customer features remain available to both roles with their existing ownership checks.
+The admin dashboard is a paginated, read-only account directory. This is RBAC in Authentication, not the complete proposed Admin Management microservice or cinema administration UI.
+
+To assign an admin, first register that person's account normally, then run from the Ubuntu project terminal (replace the example email):
+```bash
+docker compose run --rm --no-deps migrate node services/auth/scripts/set-role.js person@example.com admin
+```
+To remove admin access, use the same command ending in `user`. This trusted server command updates roles transactionally and revokes that account's sessions and recovery links. Log in again after changing roles. No public role-selection dropdown, default admin password or role-changing browser endpoint is provided.
+
+
+### Scanning tickets from a phone while developing in WSL
+A phone cannot reach your computer using `localhost`. Run `scripts/enable-phone-access.ps1` from Windows PowerShell **as Administrator**. The script forwards only frontend port 5173 to Ubuntu, allows that port from the local subnet, and sets `PUBLIC_APP_URL` plus allowed frontend origins. It does not expose database/backend ports. Then run `docker compose up --no-build -d` and keep `npm run dev` running in Ubuntu. Open the printed Wi-Fi URL on a phone connected to the same Wi-Fi before scanning a freshly loaded QR code. Sign in using the booking account. Download old PDFs again to get the corrected address. Rerun setup if the Windows/WSL IP changes. Guest/campus Wi-Fi may block communication between devices; use a shared personal hotspot if so.

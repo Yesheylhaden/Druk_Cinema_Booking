@@ -8,6 +8,8 @@ const id='cfe109cf-4a7c-4ed8-9da7-6afcc111039e';
 test('gateway isolates the implemented domains and rewrites legacy aliases',()=>{
  for(const [path,method,service] of [
  ['/api/auth/me','GET','auth'],['/api/profiles/me','GET','profiles'],['/api/auth/profile','POST','profiles'],['/api/cinemas','GET','cinemas'],['/api/movies','GET','movies'],['/api/showtimes','GET','showtimes'],['/api/halls','GET','halls'],['/api/seats','GET','seats'],['/api/bookings/seats','GET','reservations'],['/api/bookings/options','GET','payments'],['/api/bookings/payment/otp','POST','payments'],['/api/payments/authorize','POST','payments'],['/api/tickets/'+id+'/pdf','GET','tickets'],['/api/bookings/'+id+'/ticket','GET','tickets'],['/api/notifications/capabilities','GET','notifications'],['/api/search','GET','search'],['/api/bookings/mine','GET','bookings']])assert.equal(resolveRoute(path,method).service,service);
+ assert.equal(resolveRoute('/api/auth/admin/users','GET').service,'auth');
+ assert.equal(resolveRoute('/api/auth/admin/users','POST').status,405);
  assert.equal(resolveRoute('/api/tickets/'+id+'/qr','GET').service,'tickets');
  assert.equal(resolveRoute('/api/bookings/'+id+'/confirm','POST').service,'bookings');
  assert.equal(resolveRoute('/internal/reservations','POST').status,404);

@@ -28,6 +28,7 @@ export default function AuthScreens({onBack,onSuccess,initialScreen='login',onNa
  <div className="auth-form-wrap"><p className="eyebrow"><span className="dot"/>{login?'YOUR NEXT MOVIE NIGHT AWAITS':'THERE’S A SEAT FOR YOU'}</p>
  <h2 ref={heading} tabIndex={-1}>{login?'Welcome back':'Join the good company'}<i>.</i></h2>
  <p className="auth-intro">{login?'Log in and pick up where your movie night left off.':'Create your account and find your next movie night.'}</p>
+ {login&&<p className="ticket-note muted">Admins and customers use the same login. Access follows your assigned account role.</p>}
  <div className="auth-tabs" aria-label="Account screens"><button disabled={busy} aria-pressed={login} className={login?'active':''} onClick={()=>change('login')}>Log in</button><button disabled={busy} aria-pressed={!login} className={!login?'active':''} onClick={()=>change('register')}>Create account</button></div>
  <form key={screen} onSubmit={submit} aria-busy={busy}><fieldset disabled={busy} className="auth-fields">
  {!login&&<label className="field" htmlFor="auth-name">Full name<input id="auth-name" name="name" autoComplete="name" placeholder="Your full name" minLength={2} maxLength={100} required/></label>}

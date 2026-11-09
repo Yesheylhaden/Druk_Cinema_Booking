@@ -1,7 +1,7 @@
 import {randomBytes} from 'node:crypto';
 import {normalizeEmail,validEmail,validPassword,digest,sessionToken,hashPassword,verifyPassword} from './security.js';
 import {mailReady,accountMail,accountLink} from './mail.js';
-const publicUser=user=>({id:user.id,name:user.name,email:user.email,phone:user.phone,emailVerified:user.email_verified,createdAt:user.created_at});
+const publicUser=user=>({id:user.id,name:user.name,email:user.email,role:user.role,phone:user.phone,emailVerified:user.email_verified,createdAt:user.created_at});
 export function attachAccountSecurityRoutes(app,pool,{wrap,cookie,issue,origin}){
  async function current(req,res){
   const token=sessionToken(req.headers.cookie);

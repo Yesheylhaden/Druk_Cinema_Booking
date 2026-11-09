@@ -35,3 +35,9 @@ export function service(name,port=ports[name]){
  function start(){app.use((error,_req,res,_next)=>{if(error.retryAfter)res.set('Retry-After',error.retryAfter);const status=error.status||(error.type==='entity.parse.failed'||error.code==='22P02'?400:503);if(status>=500)console.error(name+': '+(error.code||error.name));res.status(status).json({error:status>=500&&!error.status?name+' service unavailable.':error.message,code:error.code});});return app.listen(process.env.PORT||port,'0.0.0.0');}
  return {app,pool,start};
 }
+
+export function requireRole(...roles){return (req,res,next)=>{
+ if(!req.account)return res.status(401).json({error:'Please sign in to continue.'});
+ if(!roles.includes(req.account.role))return res.status(403).json({error:'You do not have permission to access this resource.'});
+ next();
+};}

@@ -31,3 +31,4 @@ CREATE TABLE IF NOT EXISTS identity.action_tokens (
  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 CREATE INDEX IF NOT EXISTS action_tokens_user ON identity.action_tokens(user_id,purpose);
+ALTER TABLE identity.users ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 'user' CHECK(role IN ('user','admin'));

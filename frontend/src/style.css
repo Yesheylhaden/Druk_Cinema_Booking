@@ -171,3 +171,8 @@
 @media(max-width:760px){.brand-logo{width:54px}.auth-brand-lockup .auth-logo{width:150px;margin-bottom:16px}}
 
 .ticket-qr{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:20px 0;text-align:left}.ticket-qr img{display:block;background:#fff;border-radius:8px;max-width:100%;height:auto}.ticket-qr p{max-width:340px;line-height:1.6}.ticket-qr h3{margin-top:0}
+
+.admin-page{padding-top:50px;padding-bottom:60px}.admin-table-wrap{overflow-x:auto;margin:24px 0}.admin-table{width:100%;border-collapse:collapse;text-align:left}.admin-table th,.admin-table td{padding:16px;border-bottom:1px solid #ffffff20;overflow-wrap:anywhere}.admin-table caption{text-align:left;padding:12px 0;color:var(--muted)}.admin-table th{color:#e7c779}
+
+.hero-copy h1{font-size:clamp(46px,5.4vw,79px)}
+@media(max-width:760px){.hero-copy h1{font-size:clamp(39px,7.6vw,59px)}}

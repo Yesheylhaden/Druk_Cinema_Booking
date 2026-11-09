@@ -1,4 +1,5 @@
 const rules=[
+ [/^\/api\/auth\/admin\/users$/,['GET'],'auth'],
  [/^\/api\/auth\/profile$/,['GET','POST'],'profiles',()=>'/api/profiles/me'],
  [/^\/api\/profiles\/me$/,['GET','POST'],'profiles'],
  [/^\/api\/auth\/(?:login|register|logout|password|password\/(?:forgot|reset)|verification\/(?:request|confirm)|email\/change)$/,['POST'],'auth'],

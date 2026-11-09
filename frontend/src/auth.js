@@ -7,5 +7,7 @@ export async function accountRequest(path,body){
  if(path==='me'){try{const profile=await fetch(API+'/api/profiles/me',{credentials:'include',signal:AbortSignal.timeout(5000)});if(profile.ok)data.user=(await profile.json()).user;}catch{/* Authentication remains available when Profile is offline. */}}
  return data;
 }
-export function safeDestination(value){return /^\/ticket\/[a-f0-9-]{36}$/.test(value||'')||/^\/movie\/[1-9]\d*$/.test(value||'')||['/','/movies','/my-list','/bookings','/profile'].includes(value)?value:'/';}
+export function safeDestination(value){return /^\/ticket\/[a-f0-9-]{36}$/.test(value||'')||/^\/movie\/[1-9]\d*$/.test(value||'')||['/','/movies','/my-list','/bookings','/profile','/admin'].includes(value)?value:'/';}
 export function readRoute(){return window.location.hash.slice(1)||'/';}
+
+export function loginDestination(user,next='/'){const path=safeDestination(next);if(user?.role==='admin'&&path==='/')return '/admin';if(user?.role!=='admin'&&path==='/admin')return '/';return path;}
