@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from 'react';
-import {accountRequest} from './auth';
+import {accountRequest} from './frontendAuth';
 export default function Recovery({screen,onLogin,onDone}){
  const [token]=useState(()=>new URLSearchParams(window.location.hash.split('?')[1]||'').get('token')||'');
  const [busy,setBusy]=useState(false),[error,setError]=useState(''),[message,setMessage]=useState(''),[done,setDone]=useState(false);

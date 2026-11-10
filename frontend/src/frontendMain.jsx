@@ -1,15 +1,15 @@
-import cinemaLogo from './assets/druk-cinema-logo.png';
+import cinemaLogo from './assets/frontendDruk-cinema-logo.png';
 import React,{useState,useEffect,useRef} from 'react';
 import {createRoot} from 'react-dom/client';
-import {demoMovies,images} from './data';
-import './style.css';
-import AuthScreens from './AuthScreens';
-import Admin from './Admin';
-import Profile from './Profile';
-import TheatreSelector from './TheatreSelector';
-import Recovery from './Recovery';
-import CustomerBookings,{TicketActions,TicketPage} from './CustomerBookings';
-import {accountRequest,safeDestination,readRoute,loginDestination} from './auth';
+import {demoMovies,images} from './frontendData';
+import './frontendStyle.css';
+import AuthScreens from './frontendAuthScreens';
+import Admin from './frontendAdmin';
+import Profile from './frontendProfile';
+import TheatreSelector from './frontendTheatreSelector';
+import Recovery from './frontendRecovery';
+import CustomerBookings,{TicketActions,TicketPage} from './frontendCustomerBookings';
+import {accountRequest,safeDestination,readRoute,loginDestination} from './frontendAuth';
 const API=(import.meta.env.VITE_API_URL||'').replace(/\/$/,'');
 async function api(path,options={}){const r=await fetch(API+path,{credentials: 'include',...options,signal:AbortSignal.timeout(25000)});let data;try{data=await r.json();}catch{throw Error('The service is unavailable. Please try again.');}if(!r.ok){const error=new Error(data.error||'Please try again.');error.status=r.status;error.code=data.code;throw error;}return data;}
 const Arrow=()=> <span aria-hidden="true">↗</span>;

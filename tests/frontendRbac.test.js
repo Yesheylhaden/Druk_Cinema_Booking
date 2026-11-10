@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
-import {loginDestination} from '../frontend/src/auth.js';
+import {loginDestination} from '../frontend/src/frontendAuth.js';
 const exec=promisify(execFile);
 test('login redirects follow the assigned role and preserve ticket/customer destinations',()=>{
  assert.equal(loginDestination({role:'admin'}),'/admin');assert.equal(loginDestination({role:'user'}),'/');

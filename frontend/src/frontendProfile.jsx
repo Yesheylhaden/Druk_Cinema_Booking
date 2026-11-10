@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from 'react';
-import {accountRequest} from './auth';
+import {accountRequest} from './frontendAuth';
 export default function Profile({onUpdate,onAuthRequired}){
  const [profile,setProfile]=useState(null),[emailAvailable,setEmailAvailable]=useState(false),[busy,setBusy]=useState(''),[notice,setNotice]=useState(''),[error,setError]=useState('');
  useEffect(()=>{let active=true;accountRequest('profile').then(data=>{if(active){setProfile(data.user);setEmailAvailable(data.emailAvailable);}}).catch(err=>{if(active){if(err.status===401)onAuthRequired();else setError(err.message);}});return()=>{active=false;};},[]);

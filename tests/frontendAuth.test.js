@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {hashPassword,verifyPassword,normalizeEmail,validPassword,sessionToken,digest} from '../services/auth/src/security.js';
-import {safeDestination} from '../frontend/src/auth.js';
+import {safeDestination} from '../frontend/src/frontendAuth.js';
 test('passwords have salted hashes and reject incorrect passwords',async()=>{
  const first=await hashPassword('Correct horse 123'),second=await hashPassword('Correct horse 123');
  assert.notEqual(first,second);assert.ok(!first.includes('Correct horse'));

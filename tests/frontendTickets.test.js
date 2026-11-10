@@ -17,7 +17,7 @@ test('generates a sample ticket for a separately marked demo payment',async()=>{
 import {ticketQr,ticketUrl} from '../services/tickets/src/qr.js';
 import {PNG} from 'pngjs';
 import jsQR from 'jsqr';
-import {safeDestination} from '../frontend/src/auth.js';
+import {safeDestination} from '../frontend/src/frontendAuth.js';
 test('ticket QR decodes to its authenticated ticket page',async()=>{
  const reference='cfe109cf-4a7c-4ed8-9da7-6afcc111039e',qr=await ticketQr(reference);
  const png=PNG.sync.read(Buffer.from(qr.image.split(',')[1],'base64'));

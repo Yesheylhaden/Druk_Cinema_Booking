@@ -1,6 +1,6 @@
-import cinemaLogo from './assets/druk-cinema-logo.png';
+import cinemaLogo from './assets/frontendDruk-cinema-logo.png';
 import React,{useEffect,useRef,useState} from 'react';
-import {accountRequest} from './auth';
+import {accountRequest} from './frontendAuth';
 
 export default function AuthScreens({onBack,onSuccess,initialScreen='login',onNavigate}){
  const [screen,setScreen]=useState(initialScreen),[visible,setVisible]=useState(false),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false);
